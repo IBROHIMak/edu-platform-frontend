@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Oddiy Login Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin: 10px 0; }
+        input, select, button { padding: 10px; margin: 5px; width: 200px; }
+        .result { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Oddiy Login Test</h1>
+    
+    <form id="loginForm">
+        <div class="form-group">
+            <label>Ism:</label>
+            <input type="text" id="firstName" value="Ali" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Familiya:</label>
+            <input type="text" id="lastName" value="Valiyev" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Parol:</label>
+            <input type="password" id="password" value="Password123!" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Rol:</label>
+            <select id="role">
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        
+        <button type="submit">Login Test</button>
+    </form>
+    
+    <div id="result"></div>
+    
+    <h2>Tayyor testlar:</h2>
+    <button onclick="testAdmin()">Admin Test</button>
+    <button onclick="testStudent()">Student Test</button>
+    <button onclick="testTeacher()">Teacher Test</button>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            
+            await testLogin({ firstName, lastName, password, role });
+        });
+        
+        async function testLogin(credentials) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                console.log('🧪 Testing login:', credentials);
+                
+                const response = await fetch('http://localhost:5004/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(credentials)
+                });
+                
+                const data = await response.json();
+                console.log('📥 Response:', data);
+                
+                if (response.ok && data.success) {
+                    resultDiv.innerHTML = \`
+                        <div class="result success">
+                            <h3>✅ LOGIN MUVAFFAQIYATLI!</h3>
+                            <p><strong>User:</strong> \${data.data.user.firstName} \${data.data.user.lastName}</p>
+                            <p><strong>Role:</strong> \${data.data.user.role}</p>
+                            <p><strong>Token:</strong> \${data.data.token ? 'Mavjud' : 'Yo\'q'}</p>
+                        </div>
+                    \`;
+                } else {
+                    resultDiv.innerHTML = \`
+                        <div class="result error">
+                            <h3>❌ LOGIN XATO!</h3>
+                            <p><strong>Xatolik:</strong> \${data.message || 'Noma\'lum xatolik'}</p>
+                        </div>
+                    \`;
+                }
+            } catch (error) {
+                console.error('💥 Error:', error);
+                resultDiv.innerHTML = \`
+                    <div class="result error">
+                        <h3>💥 NETWORK XATO!</h3>
+                        <p><strong>Xatolik:</strong> \${error.message}</p>
+                    </div>
+                \`;
+            }
+        }
+        
+        async function testAdmin() {
+            await testLogin({
+                firstName: 'Admin',
+                lastName: 'Boshqaruvchi',
+                password: 'Admin123!@#',
+                role: 'admin'
+            });
+        }
+        
+        async function testStudent() {
+            await testLogin({
+                firstName: 'Ali',
+                lastName: 'Valiyev',
+                password: 'Password123!',
+                role: 'student'
+            });
+        }
+        
+        async function testTeacher() {
+            await testLogin({
+                firstName: 'Malika',
+                lastName: 'Tosheva',
+                password: 'Password123!',
+                role: 'teacher'
+            });
+        }
+    </script>
+</body>
+</html>

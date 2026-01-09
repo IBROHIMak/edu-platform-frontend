@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Test</title>
+</head>
+<body>
+    <h1>Login Test</h1>
+    <button onclick="testStudentLogin()">Test Student Login</button>
+    <button onclick="testAdminLogin()">Test Admin Login</button>
+    <div id="result"></div>
+
+    <script>
+        async function testStudentLogin() {
+            const result = document.getElementById('result');
+            result.innerHTML = 'Testing student login...';
+            
+            try {
+                const response = await fetch('http://localhost:5004/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        firstName: 'Ali',
+                        lastName: 'Valiyev',
+                        password: 'Password123!',
+                        role: 'student'
+                    })
+                });
+                
+                const data = await response.json();
+                console.log('Student login result:', data);
+                
+                if (data.success) {
+                    result.innerHTML = `✅ Student login successful! Token: ${data.data.token.substring(0, 20)}...`;
+                } else {
+                    result.innerHTML = `❌ Student login failed: ${data.message}`;
+                }
+            } catch (error) {
+                console.error('Student login error:', error);
+                result.innerHTML = `💥 Student login error: ${error.message}`;
+            }
+        }
+        
+        async function testAdminLogin() {
+            const result = document.getElementById('result');
+            result.innerHTML = 'Testing admin login...';
+            
+            try {
+                const response = await fetch('http://localhost:5004/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        firstName: 'Admin',
+                        lastName: 'Boshqaruvchi',
+                        password: 'Admin123!@#',
+                        role: 'admin'
+                    })
+                });
+                
+                const data = await response.json();
+                console.log('Admin login result:', data);
+                
+                if (data.success) {
+                    result.innerHTML = `✅ Admin login successful! Token: ${data.data.token.substring(0, 20)}...`;
+                } else {
+                    result.innerHTML = `❌ Admin login failed: ${data.message}`;
+                }
+            } catch (error) {
+                console.error('Admin login error:', error);
+                result.innerHTML = `💥 Admin login error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

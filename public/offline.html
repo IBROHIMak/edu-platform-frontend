@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Cambridge English</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .offline-container {
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .offline-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+        
+        .offline-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .offline-message {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .retry-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .retry-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .features-list {
+            margin-top: 40px;
+            text-align: left;
+        }
+        
+        .features-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 480px) {
+            .offline-title {
+                font-size: 24px;
+            }
+            
+            .offline-message {
+                font-size: 14px;
+            }
+            
+            .offline-icon {
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">
+            📡
+        </div>
+        
+        <h1 class="offline-title">Internet aloqasi yo'q</h1>
+        
+        <p class="offline-message">
+            Hozirda internet aloqasi mavjud emas. Ba'zi funksiyalar offline rejimda ham ishlaydi.
+        </p>
+        
+        <button class="retry-button" onclick="window.location.reload()">
+            🔄 Qayta urinish
+        </button>
+        
+        <div class="features-list">
+            <h3 class="features-title">Offline rejimda mavjud:</h3>
+            
+            <div class="feature-item">
+                <div class="feature-icon">📚</div>
+                <span>Saqlangan darslar va materiallar</span>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">📝</div>
+                <span>Offline uy vazifalari</span>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">🎯</div>
+                <span>Shaxsiy profil ma'lumotlari</span>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">📊</div>
+                <span>Rivojlanish statistikasi</span>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">🏆</div>
+                <span>Yutuqlar va mukofotlar</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Internet aloqasi qaytganda avtomatik yangilash
+        window.addEventListener('online', () => {
+            console.log('🌐 Internet connection restored');
+            
+            // 2 soniya kutib, sahifani yangilash
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+            
+            // Foydalanuvchiga xabar berish
+            document.querySelector('.offline-title').textContent = 'Internet aloqasi tiklandi!';
+            document.querySelector('.offline-message').textContent = 'Sahifa avtomatik yangilanmoqda...';
+            document.querySelector('.retry-button').style.display = 'none';
+        });
+        
+        // Offline holatni kuzatish
+        window.addEventListener('offline', () => {
+            console.log('📡 Internet connection lost');
+        });
+        
+        // Sahifa yuklanganda holatni tekshirish
+        if (navigator.onLine) {
+            document.querySelector('.offline-title').textContent = 'Sahifa yuklanmoqda...';
+            document.querySelector('.offline-message').textContent = 'Internet aloqasi mavjud, sahifa tez orada yuklanadi.';
+            
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Login Test</h1>
+    
+    <div>
+        <h2>Test Admin Login</h2>
+        <button onclick="testAdminLogin()">Test Admin</button>
+        <div id="admin-result"></div>
+    </div>
+    
+    <div>
+        <h2>Test Student Login</h2>
+        <button onclick="testStudentLogin()">Test Student</button>
+        <div id="student-result"></div>
+    </div>
+    
+    <div>
+        <h2>Test Teacher Login</h2>
+        <button onclick="testTeacherLogin()">Test Teacher</button>
+        <div id="teacher-result"></div>
+    </div>
+
+    <script>
+        // Set axios base URL
+        axios.defaults.baseURL = 'http://localhost:5004';
+        
+        async function testAdminLogin() {
+            const resultDiv = document.getElementById('admin-result');
+            try {
+                console.log('Testing admin login...');
+                const response = await axios.post('/api/auth/login', {
+                    firstName: 'Admin',
+                    lastName: 'Boshqaruvchi',
+                    password: 'Admin123!@#',
+                    role: 'admin'
+                });
+                
+                console.log('Admin login successful:', response.data);
+                resultDiv.innerHTML = '<p style="color: green;">✅ Admin login successful!</p>';
+                resultDiv.innerHTML += '<pre>' + JSON.stringify(response.data, null, 2) + '</pre>';
+            } catch (error) {
+                console.error('Admin login failed:', error);
+                resultDiv.innerHTML = '<p style="color: red;">❌ Admin login failed!</p>';
+                resultDiv.innerHTML += '<pre>' + JSON.stringify(error.response?.data || error.message, null, 2) + '</pre>';
+            }
+        }
+        
+        async function testStudentLogin() {
+            const resultDiv = document.getElementById('student-result');
+            try {
+                console.log('Testing student login...');
+                const response = await axios.post('/api/auth/login', {
+                    firstName: 'Ali',
+                    lastName: 'Valiyev',
+                    password: 'Password123!',
+                    role: 'student'
+                });
+                
+                console.log('Student login successful:', response.data);
+                resultDiv.innerHTML = '<p style="color: green;">✅ Student login successful!</p>';
+                resultDiv.innerHTML += '<pre>' + JSON.stringify(response.data, null, 2) + '</pre>';
+            } catch (error) {
+                console.error('Student login failed:', error);
+                resultDiv.innerHTML = '<p style="color: red;">❌ Student login failed!</p>';
+                resultDiv.innerHTML += '<pre>' + JSON.stringify(error.response?.data || error.message, null, 2) + '</pre>';
+            }
+        }
+        
+        async function testTeacherLogin() {
+            const resultDiv = document.getElementById('teacher-result');
+            try {
+                console.log('Testing teacher login...');
+                const response = await axios.post('/api/auth/login', {
+                    firstName: 'Malika',
+                    lastName: 'Tosheva',
+                    password: 'Password123!',
+                    role: 'teacher'
+                });
+                
+                console.log('Teacher login successful:', response.data);
+                resultDiv.innerHTML = '<p style="color: green;">✅ Teacher login successful!</p>';
+                resultDiv.innerHTML += '<pre>' + JSON.stringify(response.data, null, 2) + '</pre>';
+            } catch (error) {
+                console.error('Teacher login failed:', error);
+                resultDiv.innerHTML += '<p style="color: red;">❌ Teacher login failed!</p>';
+                resultDiv.innerHTML += '<pre>' + JSON.stringify(error.response?.data || error.message, null, 2) + '</pre>';
+            }
+        }
+    </script>
+</body>
+</html>
