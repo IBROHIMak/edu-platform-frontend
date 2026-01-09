@@ -25,6 +25,9 @@
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "react-scripts start",
     "dev": "react-scripts start",
